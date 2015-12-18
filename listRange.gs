@@ -3,6 +3,7 @@
  *
  * @param {string} input - The input range.
  * @param {string} [delimiter] - The character between the start and end of your range input string. By default this will work for '-' and '/'.
+ * @param {string} [title] - Optional title for instances of ARRAYFORMULA.
  * 
  * @returns {string} Comma separated list of the range.
  * 
@@ -20,8 +21,14 @@
  * // Don't mix delimiters when indicating range:
  * listRange("2/4 & 6-8")      // 2/4,6,7,8 - Come on, at least be consistent in the input.
  */
+function listRange (input, delimiter, title) {
+    if (input.constructor === Array) {
+        return input.map(function (currentInput, index) {
+            if (index === 0 && title) return title;
+            return listRange(currentInput);
+        });
+    }
 
-function listRange (input, delimiter) {
     if (delimiter && delimiter.match('&')) throw new Error('Delimiter cannot be "&".');
 
     // Standardize input formats.
